@@ -1,3 +1,4 @@
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 
@@ -5,7 +6,9 @@ namespace OpenTKTutorial
 {
     public class Window : GameWindow
     {
-        public Window() : base(
+        public IScene CurrentScene { get; private set; }
+
+        public Window(IScene firstScene) : base(
             new GameWindowSettings()
             {
                 IsMultiThreaded = true,
@@ -19,6 +22,37 @@ namespace OpenTKTutorial
             }
         )
         {
+            CurrentScene = firstScene;
+        }
+
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+            
+            (CurrentScene as IInitializable)?.Initialize();
+        }
+
+        protected override void OnUnload()
+        {
+            (CurrentScene as System.IDisposable)?.Dispose();
+
+            base.OnUnload();
+        }
+
+        protected override void OnResize(ResizeEventArgs e)
+        {
+            base.OnResize(e);
+
+            (CurrentScene as IResizable)?.Resize(e.Width, e.Height);
+        }
+
+        protected override void OnRenderFrame(FrameEventArgs args)
+        {
+            base.OnRenderFrame(args);
+
+            (CurrentScene as IRenderable)?.Render(args.Time);
+
+            Context.SwapBuffers();
         }
     }
 }
