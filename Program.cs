@@ -1,12 +1,4 @@
-﻿using System;
-
-namespace OpenTKTutorial
+﻿using (var window = new OpenTKTutorial.Window())
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
-    }
+    window.Run();
 }
