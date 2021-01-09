@@ -46,6 +46,20 @@ namespace OpenTKTutorial
             (CurrentScene as IResizable)?.Resize(e.Width, e.Height);
         }
 
+        protected override void OnUpdateFrame(FrameEventArgs args)
+        {
+            base.OnUpdateFrame(args);
+
+            if (CurrentScene is ISceneName hasName)
+            {
+                Title = $"OpenTK Tutorial - {hasName.SceneName}";
+            }
+            else
+            {
+                Title = $"OpenTK Tutorial - {CurrentScene.ToString()}";
+            }
+        }
+
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
