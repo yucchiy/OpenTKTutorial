@@ -1,4 +1,6 @@
+using System.Reflection;
 using OpenTK.Graphics.OpenGL4;
+using System.IO;
 
 namespace OpenTKTutorial
 {
@@ -25,5 +27,13 @@ namespace OpenTKTutorial
         {
             Assert(min <= value && value < max, message);
         }
+
+        public static Stream GetEmbeddedResourceStream(string path)
+        {
+            return CurrentAssembly.GetManifestResourceStream(ProjectName + "." + path.Replace("/", "."));
+        }
+
+        private static readonly Assembly CurrentAssembly = typeof(Utility).GetTypeInfo().Assembly;
+        private static readonly string ProjectName = "OpenTKTutorial";
     }
 }
