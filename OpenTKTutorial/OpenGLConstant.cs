@@ -5,6 +5,7 @@ namespace OpenTKTutorial
         public static readonly int NoneBufferId = 0;
         public static readonly int NoneVertexArrayId = 0;
         public static readonly int NoneProgramId = 0;
+        public static readonly int NoneTextureId = 0;
         public static readonly int NoneLocation = 0;
     }
 }

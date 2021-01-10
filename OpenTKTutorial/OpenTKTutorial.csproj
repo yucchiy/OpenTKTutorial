@@ -6,5 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.4.0" />
+    <PackageReference Include="SkiaSharp" Version="2.80.2" />
+
+    <EmbeddedResource Include="./Scene/Resource/*" />
   </ItemGroup>
 </Project>
