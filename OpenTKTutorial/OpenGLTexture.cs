@@ -41,7 +41,6 @@ namespace OpenTKTutorial
         {
             Utility.AssertRange(index, 0, Count, "Invalid texture index.");
 
-            GL.ActiveTexture(Ids[index], unit);
             Utility.CheckError();
         }
 

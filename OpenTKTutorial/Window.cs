@@ -1,12 +1,15 @@
-using OpenTK.Graphics.OpenGL4;
+using ImGuiNET;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
+using OpenTK.Graphics.OpenGL4;
 
 namespace OpenTKTutorial
 {
     public class Window : GameWindow
     {
         public IScene CurrentScene { get; private set; }
+
+        public ImGuiController ImGuiController { get; private set; }
 
         public Window(IScene firstScene) : base(
             new GameWindowSettings()
@@ -28,6 +31,8 @@ namespace OpenTKTutorial
         protected override void OnLoad()
         {
             base.OnLoad();
+
+            ImGuiController = new ImGuiController(Size.X, Size.Y, this);
             
             (CurrentScene as IInitializable)?.Initialize();
         }
@@ -44,6 +49,9 @@ namespace OpenTKTutorial
             base.OnResize(e);
 
             (CurrentScene as IResizable)?.Resize(e.Width, e.Height);
+
+            GL.Viewport(0, 0, e.Width, e.Height);
+            ImGuiController.Resize(e.Width, e.Height);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -58,6 +66,8 @@ namespace OpenTKTutorial
             {
                 Title = $"OpenTK Tutorial - {CurrentScene.ToString()}";
             }
+
+            ImGuiController.Update(args.Time);
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
@@ -65,6 +75,10 @@ namespace OpenTKTutorial
             base.OnRenderFrame(args);
 
             (CurrentScene as IRenderable)?.Render(args.Time);
+
+            // ImGui.ShowDemoWindow();
+
+            ImGuiController.Render(args.Time);
 
             Context.SwapBuffers();
         }

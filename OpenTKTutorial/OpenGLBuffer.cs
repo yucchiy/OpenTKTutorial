@@ -1,3 +1,4 @@
+using System;
 using OpenTK.Graphics.OpenGL4;
 
 namespace OpenTKTutorial
@@ -40,8 +41,6 @@ namespace OpenTKTutorial
 
             GL.BufferData(Target, sizeInByte, data, hint);
             Utility.CheckError();
-
-            Unbind();
         }
 
         public void Dispose()

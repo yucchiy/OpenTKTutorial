@@ -44,7 +44,6 @@ namespace OpenTKTutorial
             // Unbind
             GL.EnableVertexAttribArray(OpenGLConstant.NoneLocation);
             Utility.CheckError();
-            Unbind();
         }
 
         public void Dispose()
