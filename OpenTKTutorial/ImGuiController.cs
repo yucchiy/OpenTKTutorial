@@ -9,7 +9,7 @@ using OpenTK.Windowing.Desktop;
 
 namespace OpenTKTutorial
 {
-    public class ImGuiController : System.IDisposable, IResizable, IRenderable, IUpdatable
+    public class ImGuiController : System.IDisposable, IResizable, IRenderable, IUpdatable, IHandleableMouseScroll
     {
         private GameWindow Window { get; }
         private int VertexBuffer { get; }
@@ -29,7 +29,7 @@ namespace OpenTKTutorial
         private bool BeganFrame { get; set; }
 
         private readonly System.Numerics.Vector2 ScaleFactor = System.Numerics.Vector2.One;
-        private readonly List<char> PressedChars = new List<char>();
+        private readonly List<char> PressedChars = new List<char>(16);
 
 
         public ImGuiController(int width, int height, GameWindow gameWindow)
@@ -38,14 +38,15 @@ namespace OpenTKTutorial
             WindowWidth = width;
             WindowHeight = height;
 
+            // create and set current context.
             var context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
 
+            // configure backend flags
             var io = ImGui.GetIO();
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
 
-            // device resources
-
+            // create device resources
             VertexBuffer = GL.GenBuffer();
             CheckError();
             IndexBuffer = GL.GenBuffer();
@@ -53,7 +54,7 @@ namespace OpenTKTutorial
             VertexArray = GL.GenVertexArray();
             CheckError();
 
-            // font atlas
+            // create font atlas
             io.Fonts.AddFontDefault();
 
             IntPtr fontTexturePixels;
@@ -62,6 +63,7 @@ namespace OpenTKTutorial
             io.Fonts.SetTexID((IntPtr)FontAtlasTexture.TextureId);
             io.Fonts.ClearTexData();
 
+            // create shaders
             var vertexShaderSource = @"#version 330 core
 uniform mat4 projection_matrix;
 layout(location = 0) in vec2 in_position;
@@ -96,6 +98,7 @@ void main()
             GL.LinkProgram(Program);
             CheckError();
 
+            // setup vertex attributes.
             GL.BindVertexArray(VertexArray);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBuffer);
@@ -104,7 +107,6 @@ void main()
             CheckError();
 
             var stride = Unsafe.SizeOf<ImDrawVert>();
-
             GL.EnableVertexAttribArray(0);
             GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, stride, 0);
             GL.EnableVertexAttribArray(1);
@@ -154,6 +156,19 @@ void main()
                 ImGui.Render();
                 RenderImDrawData(ImGui.GetDrawData());
             }
+        }
+
+        public void OnMouseScroll(in OpenTK.Mathematics.Vector2 offset)
+        {
+            ImGuiIOPtr io = ImGui.GetIO();
+            
+            io.MouseWheel = offset.Y;
+            io.MouseWheelH = offset.X;
+        }
+
+        public void AddInputCharacter(char c)
+        {
+            PressedChars.Add(c);
         }
 
         public void Dispose()

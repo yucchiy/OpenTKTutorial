@@ -20,7 +20,7 @@ namespace OpenTKTutorial
             },
             new NativeWindowSettings()
             {
-                APIVersion = new System.Version(4, 1),
+                APIVersion = new System.Version(3, 3),
                 Flags = ContextFlags.ForwardCompatible,
             }
         )
@@ -66,8 +66,6 @@ namespace OpenTKTutorial
             {
                 Title = $"OpenTK Tutorial - {CurrentScene.ToString()}";
             }
-
-            ImGuiController.Update(args.Time);
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
@@ -76,11 +74,27 @@ namespace OpenTKTutorial
 
             (CurrentScene as IRenderable)?.Render(args.Time);
 
-            // ImGui.ShowDemoWindow();
+            ImGuiController.Update(args.Time);
+
+            ImGui.ShowDemoWindow();
 
             ImGuiController.Render(args.Time);
 
             Context.SwapBuffers();
+        }
+
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            base.OnMouseWheel(e);
+
+            // ImGuiController.OnMouseScroll(e.Offset);
+        }
+
+        protected override void OnTextInput(TextInputEventArgs e)
+        {
+            base.OnTextInput(e);
+            
+            ImGuiController.AddInputCharacter((char)e.Unicode);
         }
     }
 }
