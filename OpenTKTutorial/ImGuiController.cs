@@ -251,7 +251,7 @@ void main()
 
             var io = ImGui.GetIO();
 
-            var mvpMatrix = Matrix4.CreateOrthographicOffCenter(
+            var projectionMatrix = Matrix4.CreateOrthographicOffCenter(
                 0.0f,
                 io.DisplaySize.X,
                 io.DisplaySize.Y,
@@ -262,7 +262,7 @@ void main()
 
             GL.UseProgram(Program);
             CheckError();
-            GL.UniformMatrix4(GL.GetUniformLocation(Program, "projection_matrix"), false, ref mvpMatrix);
+            GL.UniformMatrix4(GL.GetUniformLocation(Program, "projection_matrix"), false, ref projectionMatrix);
             CheckError();
             GL.Uniform1(GL.GetUniformLocation(Program, "in_fontTexture"), 0);
             CheckError();
