@@ -137,11 +137,6 @@ void main()
 
         public void Update(double deltaTime)
         {
-            if (BeganFrame)
-            {
-                ImGui.Render();
-            }
-
             SetPerFramImGuiData((float)deltaTime);
             UpdateInput();
 
@@ -150,12 +145,8 @@ void main()
 
         public void Render(double deltaTime)
         {
-            if (BeganFrame)
-            {
-                BeganFrame = false;
-                ImGui.Render();
-                RenderImDrawData(ImGui.GetDrawData());
-            }
+            ImGui.Render();
+            RenderImDrawData(ImGui.GetDrawData());
         }
 
         public void OnMouseScroll(in OpenTK.Mathematics.Vector2 offset)
