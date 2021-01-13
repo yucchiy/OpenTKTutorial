@@ -53,7 +53,7 @@ void main()
 
         private double ElapsedTime { get; set; }
 
-        public void Initialize()
+        public void Initialize(InitializeContext context)
         {
             InitializeBuffer();
             InitializeShader();

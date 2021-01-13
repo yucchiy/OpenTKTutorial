@@ -59,7 +59,7 @@ void main()
         private OpenGLProgram Program { get; set; }
 
 
-        public void Initialize()
+        public void Initialize(InitializeContext context)
         {
             InitializeBuffer();
             InitializeShader();

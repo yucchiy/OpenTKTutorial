@@ -47,7 +47,7 @@ void main()
         private OpenGLShader FragmentShader { get; set; }
         private OpenGLProgram Program { get; set; }
 
-        public void Initialize()
+        public void Initialize(InitializeContext context)
         {
             InitializeBuffer();
             InitializeShader();

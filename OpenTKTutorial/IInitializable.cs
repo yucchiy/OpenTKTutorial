@@ -2,6 +2,10 @@ namespace OpenTKTutorial
 {
     public interface IInitializable
     {
-        void Initialize();
+        void Initialize(InitializeContext context);
+    }
+
+    public struct InitializeContext
+    {
     }
 }

@@ -61,7 +61,7 @@ void main()
         private Texture2D Texture { get; set; }
 
 
-        public void Initialize()
+        public void Initialize(InitializeContext context)
         {
             InitializeBuffer();
             InitializeTexture();
