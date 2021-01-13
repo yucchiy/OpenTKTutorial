@@ -58,6 +58,7 @@ namespace OpenTKTutorial
         {
             base.OnUpdateFrame(args);
 
+            ImGuiController.Update(args.Time);
             if (CurrentScene is ISceneName hasName)
             {
                 Title = $"OpenTK Tutorial - {hasName.SceneName}";
@@ -74,10 +75,6 @@ namespace OpenTKTutorial
 
             (CurrentScene as IRenderable)?.Render(args.Time);
 
-            ImGuiController.Update(args.Time);
-
-            ImGui.ShowDemoWindow();
-
             ImGuiController.Render(args.Time);
 
             Context.SwapBuffers();
@@ -86,14 +83,12 @@ namespace OpenTKTutorial
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
             base.OnMouseWheel(e);
-
-            // ImGuiController.OnMouseScroll(e.Offset);
+            ImGuiController.OnMouseScroll(e.Offset);
         }
 
         protected override void OnTextInput(TextInputEventArgs e)
         {
             base.OnTextInput(e);
-            
             ImGuiController.AddInputCharacter((char)e.Unicode);
         }
     }

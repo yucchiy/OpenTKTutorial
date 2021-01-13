@@ -298,8 +298,8 @@ void main()
 
                 for (var j = 0; j < commandList.CmdBuffer.Size; ++j)
                 {
-                    var command = commandList.CmdBuffer[j];
-                    if (command .UserCallback != IntPtr.Zero)
+                    var commandBuffer = commandList.CmdBuffer[j];
+                    if (commandBuffer.UserCallback != IntPtr.Zero)
                     {
                         throw new NotImplementedException();
                     }
@@ -307,17 +307,17 @@ void main()
                     FontAtlasTexture.ActiveTexture(TextureUnit.Texture0);
                     FontAtlasTexture.BindTexture();
 
-                    var clip = command.ClipRect;
+                    var clip = commandBuffer.ClipRect;
                     GL.Scissor((int)clip.X, WindowHeight - (int)clip.W, (int)(clip.Z - clip.X), (int)(clip.W - clip.Y));
                     CheckError();
 
                     if ((io.BackendFlags & ImGuiBackendFlags.RendererHasVtxOffset) != 0)
                     {
-                        GL.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)command.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(command.IdxOffset * sizeof(ushort)), (int)command.VtxOffset);
+                        GL.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)commandBuffer.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(commandBuffer.IdxOffset * sizeof(ushort)), (int)commandBuffer.VtxOffset);
                     }
                     else
                     {
-                        GL.DrawElements(BeginMode.Triangles, (int)command.ElemCount, DrawElementsType.UnsignedShort, (int)command.IdxOffset * sizeof(ushort));
+                        GL.DrawElements(BeginMode.Triangles, (int)commandBuffer.ElemCount, DrawElementsType.UnsignedShort, (int)commandBuffer.IdxOffset * sizeof(ushort));
                     }
 
                     CheckError();
