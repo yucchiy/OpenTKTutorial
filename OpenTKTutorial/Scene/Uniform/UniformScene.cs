@@ -3,9 +3,8 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace OpenTKTutorial
 {
-    public class UniformScene : IScene, ISceneName, IInitializable, IRenderable, IResizable, IDisposable
+    public class UniformScene : IScene, IInitializable, IRenderable, IResizable, IDisposable
     {
-        public string SceneName { get; private set; }
         private readonly float[] Vertices =
         {
             -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // left-bottom
@@ -104,7 +103,6 @@ void main()
 
         public void Render(double deltaTime)
         {
-            SceneName = this.ToString() + " (FPS: " + (1/deltaTime).ToString("0.") + ")";
             GL.Clear(ClearBufferMask.ColorBufferBit);
             Utility.CheckError();
 

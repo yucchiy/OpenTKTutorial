@@ -26,7 +26,6 @@ namespace OpenTKTutorial
             Bind(index);
             GL.TexImage2D(Target, level, internalFormat, width, height, 0, format, type, data);
             Utility.CheckError();
-            Unbind();
         }
 
         public void Bind(int index)
@@ -49,7 +48,6 @@ namespace OpenTKTutorial
             Bind(index);
             GL.TexParameter(Target, parameterName, value);
             Utility.CheckError();
-            Unbind();
         }
 
         public void Unbind()

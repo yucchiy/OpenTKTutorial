@@ -7,5 +7,10 @@ namespace OpenTKTutorial
 
     public struct InitializeContext
     {
+        public GameManager Manager { get; }
+        public InitializeContext(GameManager manager)
+        {
+            Manager = manager;
+        }
     }
 }

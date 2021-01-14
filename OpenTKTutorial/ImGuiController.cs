@@ -9,7 +9,7 @@ using OpenTK.Windowing.Desktop;
 
 namespace OpenTKTutorial
 {
-    public class ImGuiController : System.IDisposable, IResizable, IRenderable, IUpdatable, IHandleableMouseScroll
+    public class ImGuiController : System.IDisposable, IResizable, IRenderable, IUpdatable
     {
         private GameWindow Window { get; }
         private int VertexBuffer { get; }
