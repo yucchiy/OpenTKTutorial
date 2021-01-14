@@ -126,7 +126,7 @@ void main()
             SetKeyMappings(io);
             SetPerFramImGuiData(1f / 60f);
 
-            NewFrame();
+            NewFrameImGui();
         }
 
         public void Resize(int width, int height)
@@ -137,16 +137,24 @@ void main()
 
         public void Update(double deltaTime)
         {
+            if (BeganFrame)
+            {
+                RenderImGui();
+            }
+
             SetPerFramImGuiData((float)deltaTime);
             UpdateInput();
 
-            NewFrame();
+            NewFrameImGui();
         }
 
         public void Render(double deltaTime)
         {
-            ImGui.Render();
-            RenderImDrawData(ImGui.GetDrawData());
+            if (BeganFrame)
+            {
+                RenderImGui();
+                RenderImDrawData(ImGui.GetDrawData());
+            }
         }
 
         public void OnMouseScroll(in OpenTK.Mathematics.Vector2 offset)
@@ -239,10 +247,26 @@ void main()
             io.DeltaTime = deltaTimeSeconds;
         }
 
-        private void NewFrame()
+        private void NewFrameImGui()
         {
+            if (BeganFrame)
+            {
+                return;
+            }
+
             ImGui.NewFrame();
             BeganFrame = true;
+        }
+
+        private void RenderImGui()
+        {
+            if (!BeganFrame)
+            {
+                return;
+            }
+
+            ImGui.Render();
+            BeganFrame = false;
         }
 
         private void RenderImDrawData(ImDrawDataPtr data)
