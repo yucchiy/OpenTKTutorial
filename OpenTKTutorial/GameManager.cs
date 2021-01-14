@@ -105,6 +105,7 @@ namespace OpenTKTutorial
             }
 
             CurrentScene = scene;
+            Window.Title = $"{CurrentScene.GetType().Name} - OpenTKTutorial";
         }
     }
 }
