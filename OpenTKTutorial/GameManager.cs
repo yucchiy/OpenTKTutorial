@@ -7,12 +7,15 @@ namespace OpenTKTutorial
     {
         private GameWindow Window { get; }
         private ImGuiController ImGuiController { get; }
+        private SceneSelector SceneSelector { get; }
         private IScene CurrentScene { get; set; }
 
         public GameManager(GameWindow window)
         {
             Window = window;
             ImGuiController = new ImGuiController(Window.Size.X, Window.Size.Y, Window);
+            SceneSelector = new SceneSelector();
+            SceneSelector.Initialize(new InitializeContext(this));
         }
 
         public void ReplaceScene<T>() where T : IScene, new()
@@ -38,6 +41,8 @@ namespace OpenTKTutorial
             {
                 guiUpdatable.UpdateGUI(deltaTime);
             }
+
+            SceneSelector.UpdateGUI(deltaTime);
         }
 
         public void Render(double deltaTime)
@@ -47,6 +52,7 @@ namespace OpenTKTutorial
                 renderable.Render(deltaTime);
             }
 
+            SceneSelector.UpdateGUI(deltaTime);
             ImGuiController.Render(deltaTime);
         }
 

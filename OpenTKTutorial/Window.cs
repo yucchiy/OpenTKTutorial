@@ -27,7 +27,7 @@ namespace OpenTKTutorial
         protected override void OnLoad()
         {
             base.OnLoad();
-            Manager.ReplaceScene<SceneSelectScene>();
+            Manager.ReplaceScene<FirstScene>();
             Size = new OpenTK.Mathematics.Vector2i(1280, 720);
         }
 

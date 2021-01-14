@@ -4,7 +4,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace OpenTKTutorial
 {
-    public class SceneSelectScene : IScene, IInitializable, IGUIUpdatable, IRenderable, IDisposable
+    public class SceneSelector : IInitializable, IGUIUpdatable, IDisposable
     {
         private SceneDescription[] SceneList { get; set; }
         private GameManager Manager { get; set; }
@@ -33,11 +33,6 @@ namespace OpenTKTutorial
                     typeof(TransformTest)
                 )
             };
-        }
-
-        public void Render(double deltaTime)
-        {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
         }
 
         public void UpdateGUI(double deltaTime)
