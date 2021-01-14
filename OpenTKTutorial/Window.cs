@@ -34,7 +34,7 @@ namespace OpenTKTutorial
 
             ImGuiController = new ImGuiController(Size.X, Size.Y, this);
             
-            (CurrentScene as IInitializable)?.Initialize();
+            (CurrentScene as IInitializable)?.Initialize(new InitializeContext());
         }
 
         protected override void OnUnload()
@@ -59,6 +59,9 @@ namespace OpenTKTutorial
             base.OnUpdateFrame(args);
 
             ImGuiController.Update(args.Time);
+
+            (CurrentScene as IUpdatable)?.Update(args.Time);
+
             if (CurrentScene is ISceneName hasName)
             {
                 Title = $"OpenTK Tutorial - {hasName.SceneName}";
