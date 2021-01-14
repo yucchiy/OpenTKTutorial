@@ -2,6 +2,8 @@
 
 This is my hobby project for understanding about OpenTK & OpenGL.
 
+# ScreenShot
+
 ## Basic
 
 ### 01. First Triangle
@@ -10,7 +12,7 @@ Display a triangle.
 
 ![01. First Triangle](./Screenshot/01_first_triangle.png)
 
-### 02. First Triangle
+### 02. Colored Triangle
 
 Display a triangle with colored vertices.
 
