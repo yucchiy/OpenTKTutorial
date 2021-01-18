@@ -35,3 +35,9 @@ Display a rectangle with IBO.
 Object Transformations & Camera.
 
 ![05. Transformations](./Screenshot/05_transform.png)
+
+### 06. Basic Light
+
+Phong Lighting model.
+
+![06. Basic Light](./Screenshot/06_basic_light.png)
