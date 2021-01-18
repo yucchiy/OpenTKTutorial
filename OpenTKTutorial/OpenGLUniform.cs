@@ -46,6 +46,13 @@ namespace OpenTKTutorial
             Utility.CheckError();
         }
 
+        public void Uniform3(in Vector3 value)
+        {
+            Program.Use();
+            GL.Uniform3(Location, value);
+            Utility.CheckError();
+        }
+
         public void Matrix4(bool transpose, ref Matrix4 value)
         {
             Program.Use();

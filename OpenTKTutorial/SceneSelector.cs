@@ -31,6 +31,9 @@ namespace OpenTKTutorial
                 ),
                 new SceneDescription(
                     typeof(TransformTest)
+                ),
+                new SceneDescription(
+                    typeof(BasicLightTestScene)
                 )
             };
         }
