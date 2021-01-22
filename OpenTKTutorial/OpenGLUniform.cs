@@ -46,10 +46,24 @@ namespace OpenTKTutorial
             Utility.CheckError();
         }
 
+        public void Uniform2(in Vector2 value)
+        {
+            Program.Use();
+            GL.Uniform2(Location, value);
+            Utility.CheckError();
+        }
+
         public void Uniform3(in Vector3 value)
         {
             Program.Use();
             GL.Uniform3(Location, value);
+            Utility.CheckError();
+        }
+
+        public void Uniform4(in Vector4 value)
+        {
+            Program.Use();
+            GL.Uniform4(Location, value);
             Utility.CheckError();
         }
 
