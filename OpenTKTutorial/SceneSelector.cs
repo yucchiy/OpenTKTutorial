@@ -34,6 +34,9 @@ namespace OpenTKTutorial
                 ),
                 new SceneDescription(
                     typeof(BasicLightTestScene)
+                ),
+                new SceneDescription(
+                    typeof(ModelLoadingScene)
                 )
             };
         }

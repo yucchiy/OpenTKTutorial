@@ -4,12 +4,14 @@ namespace OpenTKTutorial
 {
     public class Material : System.IDisposable
     {
+        public string Name { get; }
         public OpenGLProgram Program { get; }
 
         public System.Collections.Generic.Dictionary<string, OpenGLUniform> Uniforms { get; }
 
-        public Material(string vertexShaderSourceCode, string fragmentShaderSourceCode)
+        public Material(string name, string vertexShaderSourceCode, string fragmentShaderSourceCode)
         {
+            Name = name;
             using (var vertexShader = new OpenGLShader(OpenTK.Graphics.OpenGL4.ShaderType.VertexShader, vertexShaderSourceCode))
             {
                 using (var fragmentShader = new OpenGLShader(OpenTK.Graphics.OpenGL4.ShaderType.FragmentShader, fragmentShaderSourceCode))
@@ -24,6 +26,11 @@ namespace OpenTKTutorial
         public void Use()
         {
             Program.Use();
+        }
+
+        public void Unuse()
+        {
+            Program.Unuse();
         }
 
         public void SetInt(string name, int value)

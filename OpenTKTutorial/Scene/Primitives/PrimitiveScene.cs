@@ -102,7 +102,6 @@ void main()
         {
             ImGui.Begin("Properties");
 
-
             foreach (var shape in Shapes)
             {
                 ImGui.Text($"Shape #{shape.GetHashCode()}");

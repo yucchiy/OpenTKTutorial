@@ -28,7 +28,7 @@ namespace OpenTKTutorial
 
         private bool BeganFrame { get; set; }
 
-        private readonly System.Numerics.Vector2 ScaleFactor = System.Numerics.Vector2.One;
+        private System.Numerics.Vector2 ScaleFactor = System.Numerics.Vector2.One;
         private readonly List<char> PressedChars = new List<char>(16);
 
 
@@ -133,6 +133,10 @@ void main()
         {
             WindowWidth = width;
             WindowHeight = height;
+            if (Window.TryGetCurrentMonitorScale(out var horizontalScale, out var verticalScale))
+            {
+                ScaleFactor = new System.Numerics.Vector2(horizontalScale, verticalScale);
+            }
         }
 
         public void Update(double deltaTime)
@@ -157,7 +161,7 @@ void main()
             }
         }
 
-        public void OnMouseScroll(in OpenTK.Mathematics.Vector2 offset)
+        public void OnMouseScroll(in System.Numerics.Vector2 offset)
         {
             ImGuiIOPtr io = ImGui.GetIO();
             
@@ -242,7 +246,7 @@ void main()
         private void SetPerFramImGuiData(float deltaTimeSeconds)
         {
             var io = ImGui.GetIO();
-            io.DisplaySize = new System.Numerics.Vector2(WindowWidth / ScaleFactor.X, WindowHeight / ScaleFactor.Y);
+            io.DisplaySize = new System.Numerics.Vector2(WindowWidth, WindowHeight);
             io.DisplayFramebufferScale = ScaleFactor;
             io.DeltaTime = deltaTimeSeconds;
         }
@@ -275,10 +279,11 @@ void main()
 
             var io = ImGui.GetIO();
 
+            var frameBufferScale = data.FramebufferScale;
             var projectionMatrix = Matrix4.CreateOrthographicOffCenter(
                 0.0f,
-                io.DisplaySize.X,
-                io.DisplaySize.Y,
+                io.DisplaySize.X * io.DisplayFramebufferScale.X,
+                io.DisplaySize.Y * io.DisplayFramebufferScale.Y,
                 0.0f,
                 -1.0f,
                 1.0f
@@ -332,7 +337,11 @@ void main()
                     FontAtlasTexture.BindTexture();
 
                     var clip = commandBuffer.ClipRect;
-                    GL.Scissor((int)clip.X, WindowHeight - (int)clip.W, (int)(clip.Z - clip.X), (int)(clip.W - clip.Y));
+                    var clipX = (int)(clip.X * frameBufferScale.X);
+                    var clipY = (int)((WindowHeight - (int)clip.W) * frameBufferScale.Y);
+                    var clipZ = (int)((clip.Z - clip.X) * frameBufferScale.X);
+                    var clipW = (int)((clip.W - clip.Y) * frameBufferScale.Y);
+                    GL.Scissor(clipX, clipY, clipZ, clipW);
                     CheckError();
 
                     if ((io.BackendFlags & ImGuiBackendFlags.RendererHasVtxOffset) != 0)

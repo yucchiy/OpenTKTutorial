@@ -6,10 +6,12 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="AssimpNet" Version="4.1.0" />
     <PackageReference Include="ImGui.NET" Version="1.78.0" />
     <PackageReference Include="OpenTK" Version="4.4.0" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
 
-    <EmbeddedResource Include="./Scene/Resource/*" />
+    <EmbeddedResource Include="./Scene/Resource/**/*" />
+    <EmbeddedResource Include="./Resource/**/*" />
   </ItemGroup>
 </Project>

@@ -9,11 +9,27 @@ namespace OpenTKTutorial
         private ImGuiController ImGuiController { get; }
         private SceneSelector SceneSelector { get; }
         private IScene CurrentScene { get; set; }
+        private System.Numerics.Vector2 DisplayScale { get; }
+
+        public System.Numerics.Vector2 DisplaySize
+        {
+            get => new System.Numerics.Vector2(Window.Size.X, Window.Size.Y);
+        }
 
         public GameManager(GameWindow window)
         {
             Window = window;
-            ImGuiController = new ImGuiController(Window.Size.X, Window.Size.Y, Window);
+            if (Window.TryGetCurrentMonitorScale(out var horizontalScale, out var verticalScale))
+            {
+                DisplayScale = new System.Numerics.Vector2(horizontalScale, verticalScale);
+            }
+            else
+            {
+                DisplayScale = System.Numerics.Vector2.One;
+            }
+            System.Console.WriteLine($"DisplayScale = {DisplayScale}");
+
+            ImGuiController = new ImGuiController((int)DisplaySize.X, (int)DisplaySize.Y, Window);
             SceneSelector = new SceneSelector();
             SceneSelector.Initialize(new InitializeContext(this));
         }
@@ -31,7 +47,6 @@ namespace OpenTKTutorial
         public void Update(double deltaTime)
         {
             ImGuiController.Update(deltaTime);
-
             if (CurrentScene is IUpdatable updatable)
             {
                 updatable.Update(deltaTime);
@@ -52,18 +67,18 @@ namespace OpenTKTutorial
                 renderable.Render(deltaTime);
             }
 
-            SceneSelector.UpdateGUI(deltaTime);
             ImGuiController.Render(deltaTime);
         }
 
         public void Resize(int width, int height)
         {
             ImGuiController.Resize(width, height);
-
             if (CurrentScene is IResizable resizable)
             {
                 resizable.Resize(width, height);
             }
+
+            OpenTK.Graphics.OpenGL4.GL.Viewport(0, 0, (int)(DisplaySize.X * DisplayScale.X), (int)(DisplaySize.Y * DisplayScale.Y));
         }
 
         public void Dispose()
@@ -80,7 +95,7 @@ namespace OpenTKTutorial
 
         public void MouseScroll(in OpenTK.Mathematics.Vector2 offset)
         {
-            ImGuiController.OnMouseScroll(offset);
+            ImGuiController.OnMouseScroll(new System.Numerics.Vector2(offset.X, offset.Y));
         }
 
         public void TextInput(int unicode)
@@ -106,6 +121,11 @@ namespace OpenTKTutorial
 
             CurrentScene = scene;
             Window.Title = $"{CurrentScene.GetType().Name} - OpenTKTutorial";
+
+            if (CurrentScene is IResizable resizable)
+            {
+                resizable.Resize((int)DisplaySize.X, (int)DisplaySize.Y);
+            }
         }
     }
 }
