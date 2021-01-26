@@ -1,5 +1,6 @@
 using Assimp;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace OpenTKTutorial
 {
@@ -27,6 +28,7 @@ namespace OpenTKTutorial
 
                     Utility.Assert(mesh.HasFaces, "Scene should have any face.");
                     Utility.Assert(mesh.HasNormals, "Scene should have any normal.");
+                    Utility.Assert(mesh.HasFaces, "Scene should have any face.");
 
                     var meshDescriptor = new Mesh.Descriptor();
 
@@ -48,7 +50,19 @@ namespace OpenTKTutorial
                         meshDescriptor.Normals[3 * normalIndex + 2] = normal.Z;
                     }
 
-                    meshDescriptor.Indices = mesh.GetUnsignedIndices();
+                    // meshDescriptor.Indices = mesh.GetUnsignedIndices();
+                    var indices = new List<uint>();
+                    for (var faceIndex = 0; faceIndex < mesh.Faces.Count; ++faceIndex)
+                    {
+                        var face = mesh.Faces[faceIndex];
+                        for (var faceOffset = 0; faceOffset < (face.IndexCount - 2); ++faceOffset)
+                        {
+                            indices.Add((uint) face.Indices[0]);
+                            indices.Add((uint) face.Indices[faceOffset + 1]);
+                            indices.Add((uint) face.Indices[faceOffset + 2]);
+                        }
+                    }
+                    meshDescriptor.Indices = indices.ToArray();
 
                     meshes[meshIndex] = new Mesh(meshDescriptor);
                     materialIndices[meshIndex] = mesh.MaterialIndex;

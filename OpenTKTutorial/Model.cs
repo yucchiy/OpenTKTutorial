@@ -29,7 +29,7 @@ namespace OpenTKTutorial
             {
                 var materialIndex = descriptor.MaterialIndices[rendererIndex];
                 Utility.AssertRange(materialIndex, 0, descriptor.Materials.Length, "Invalid material index.");
-                MeshRenderers[rendererIndex] = new MeshRenderer(descriptor.Meshes[rendererIndex], descriptor.Materials[rendererIndex]);
+                MeshRenderers[rendererIndex] = new MeshRenderer(descriptor.Meshes[rendererIndex], descriptor.Materials[materialIndex]);
             }
 
             Position = Vector3.Zero;
@@ -94,27 +94,6 @@ namespace OpenTKTutorial
                 meshRenderer.Material.SetVec3(
                     OpenTKTutorialConstant.Material.LightColorName,
                     light.Color
-                );
-
-                meshRenderer.Material.SetVec3(
-                    OpenTKTutorialConstant.Material.AmbientColorName,
-                    new Vector3(0.25f, 0.25f, 0.25f)
-                );
-
-                meshRenderer.Material.SetVec3(
-                    OpenTKTutorialConstant.Material.DiffuseColorName,
-                    new Vector3(0.5f, 0.5f, 0.5f)
-                );
-
-                meshRenderer.Material.SetVec3(
-                    OpenTKTutorialConstant.Material.SpecularColorName,
-                    new Vector3(0.25f, 0.25f, 0.25f)
-                    // new Vector3(0.0f, 0.0f, 0.0f)
-                );
-
-                meshRenderer.Material.SetFloat(
-                    OpenTKTutorialConstant.Material.SpecularShininessName,
-                    32f
                 );
             }
         }

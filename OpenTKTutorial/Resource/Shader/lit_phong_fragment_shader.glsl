@@ -37,7 +37,7 @@ void main()
 
     vec3 viewDirectionWorld = normalize(camera.PositionWorld - VertexPositionWorld);
     vec3 reflectDirectionWorld = reflect(-lightDirectionWorld, VertexNormalWorld);
-    vec3 specular = pow(max(dot(viewDirectionWorld, reflectDirectionWorld), 0.0), material.SpecularShininess) * material.SpecularColor;
+    vec3 specular = pow(max(dot(viewDirectionWorld, reflectDirectionWorld), 0.0), max(2, material.SpecularShininess)) * material.SpecularColor;
 
     vec3 resultColor = light.Color * (ambient + diffuse + specular);
 

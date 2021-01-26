@@ -71,9 +71,9 @@ namespace OpenTKTutorial
                 material.SetVec3(
                     OpenTKTutorialConstant.Material.SpecularColorName,
                     new Vector3(
-                        assimpMaterial.ColorDiffuse.R,
-                        assimpMaterial.ColorDiffuse.G,
-                        assimpMaterial.ColorDiffuse.B
+                        assimpMaterial.ColorSpecular.R,
+                        assimpMaterial.ColorSpecular.G,
+                        assimpMaterial.ColorSpecular.B
                     )
                 );
             }
