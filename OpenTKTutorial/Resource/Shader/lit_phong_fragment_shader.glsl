@@ -23,17 +23,22 @@ uniform Material material;
 uniform Camera camera;
 uniform Light light;
 
+uniform sampler2D texture1;
+
 in vec3 VertexPositionWorld;
 in vec3 VertexNormalWorld;
+in vec2 VertexTextureCoordinate;
 
 out vec4 FragColor;
 
 void main()
 {
+    // vec3 ambient = material.AmbientColor * texture(texture1, VertexTextureCoordinate).xyz;
     vec3 ambient = material.AmbientColor;
 
     vec3 lightDirectionWorld = normalize(light.PositionWorld - VertexPositionWorld);
-    vec3 diffuse = max(dot(VertexNormalWorld, lightDirectionWorld), 0.0) * material.DiffuseColor;
+    vec3 diffuse = max(dot(normalize(VertexNormalWorld), lightDirectionWorld), 0.0) * material.DiffuseColor * texture(texture1, VertexTextureCoordinate).xyz;
+    // vec3 diffuse = max(dot(normalize(VertexNormalWorld), lightDirectionWorld), 0.0) * material.DiffuseColor;
 
     vec3 viewDirectionWorld = normalize(camera.PositionWorld - VertexPositionWorld);
     vec3 reflectDirectionWorld = reflect(-lightDirectionWorld, VertexNormalWorld);

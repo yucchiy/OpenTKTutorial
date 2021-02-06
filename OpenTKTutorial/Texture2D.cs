@@ -44,6 +44,11 @@ namespace OpenTKTutorial
             GLTexture.SetParameter(0, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
         }
 
+        public void Active(TextureUnit unit)
+        {
+            GLTexture.Active(0, unit);
+        }
+
         public void Bind()
         {
             GLTexture.Bind(0);

@@ -6,6 +6,7 @@ namespace OpenTKTutorial
 {
     public class Mesh : System.IDisposable
     {
+        public string Name { get; } = null;
         public float[] Positions { get; } = null;
         public float[] Normals { get; } = null;
         public float[] Colors { get; } = null;
@@ -29,6 +30,7 @@ namespace OpenTKTutorial
 
             VertexAttributes = CalculateAttributes(descriptor);
 
+            Name = descriptor.Name;
             VertexBuffer = new OpenGLBuffer(VertexAttributes.Length, BufferTarget.ArrayBuffer);
             IndexBuffer = new OpenGLBuffer(1, BufferTarget.ElementArrayBuffer);
             VertexArray = new OpenGLVertexArray(1);
@@ -132,6 +134,7 @@ namespace OpenTKTutorial
 
         public class Descriptor
         {
+            public string Name;
             public float[] Positions;
             public float[] Normals;
             public float[] Colors;

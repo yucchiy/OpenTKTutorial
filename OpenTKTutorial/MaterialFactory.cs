@@ -21,7 +21,7 @@ namespace OpenTKTutorial
             throw new OpenTKTutorialException($"MaterialType {type} is not support.");
         }
 
-        public Material CreateMaterial(Assimp.Material assimpMaterial)
+        public Material CreateMaterial(Assimp.Material assimpMaterial, string baseDirectory = null)
         {
             var material = default(Material);
             if (assimpMaterial.HasShadingMode)
@@ -53,6 +53,13 @@ namespace OpenTKTutorial
                     )
                 );
             }
+            else
+            {
+                material.SetVec3(
+                    OpenTKTutorialConstant.Material.AmbientColorName,
+                    new Vector3(Vector3.Zero)
+                );
+            }
 
             if (assimpMaterial.HasColorDiffuse)
             {
@@ -63,6 +70,13 @@ namespace OpenTKTutorial
                         assimpMaterial.ColorDiffuse.G,
                         assimpMaterial.ColorDiffuse.B
                     )
+                );
+            }
+            else
+            {
+                material.SetVec3(
+                    OpenTKTutorialConstant.Material.DiffuseColorName,
+                    new Vector3(Vector3.Zero)
                 );
             }
 
@@ -77,6 +91,28 @@ namespace OpenTKTutorial
                     )
                 );
             }
+            else
+            {
+                material.SetVec3(
+                    OpenTKTutorialConstant.Material.SpecularColorName,
+                    new Vector3(Vector3.Zero)
+                );
+            }
+
+            material.SetVec3(
+                    OpenTKTutorialConstant.Material.AmbientColorName,
+                    new Vector3(Vector3.Zero)
+            );
+
+            // material.SetVec3(
+            //     OpenTKTutorialConstant.Material.DiffuseColorName,
+            //     new Vector3(Vector3.Zero)
+            // );
+
+            material.SetVec3(
+                OpenTKTutorialConstant.Material.SpecularColorName,
+                new Vector3(Vector3.Zero)
+            );
 
             if (assimpMaterial.HasShininess)
             {
@@ -84,6 +120,32 @@ namespace OpenTKTutorial
                     OpenTKTutorialConstant.Material.SpecularShininessName,
                     assimpMaterial.Shininess
                 );
+            }
+
+            if (assimpMaterial.HasTextureDiffuse)
+            {
+                var fileName = System.IO.Path.GetFileNameWithoutExtension(assimpMaterial.TextureDiffuse.FilePath);
+                var fileExtension = System.IO.Path.GetExtension(assimpMaterial.TextureDiffuse.FilePath);
+                var filePath = fileExtension == ".psd" ? fileName + ".png" : fileName + fileExtension;
+
+                var texture = new Texture2D(baseDirectory + "/" + filePath);
+
+                switch (assimpMaterial.TextureDiffuse.TextureIndex)
+                {
+                    case 0:
+                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture0, texture);
+                        break;
+                    case 1:
+                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture1, texture);
+                        break;
+                    case 2:
+                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture2, texture);
+                        break;
+                    case 3:
+                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture3, texture);
+                        break;
+
+                }
             }
 
             return material;

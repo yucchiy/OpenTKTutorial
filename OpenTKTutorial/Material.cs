@@ -1,4 +1,6 @@
 using OpenTK.Mathematics;
+using OpenTK.Graphics.OpenGL4;
+using OpenTKTutorial;
 
 namespace OpenTKTutorial
 {
@@ -8,6 +10,7 @@ namespace OpenTKTutorial
         public OpenGLProgram Program { get; }
 
         public System.Collections.Generic.Dictionary<string, OpenGLUniform> Uniforms { get; }
+        public System.Collections.Generic.Dictionary<TextureUnit, Texture2D> Textures { get; }
 
         public Material(string name, string vertexShaderSourceCode, string fragmentShaderSourceCode)
         {
@@ -21,11 +24,17 @@ namespace OpenTKTutorial
             }
 
             Uniforms = new System.Collections.Generic.Dictionary<string, OpenGLUniform>();
+            Textures = new System.Collections.Generic.Dictionary<TextureUnit, Texture2D>();
         }
 
         public void Use()
         {
             Program.Use();
+            foreach (var texturePair in Textures)
+            {
+                texturePair.Value.Bind();
+                texturePair.Value.Active(texturePair.Key);
+            }
         }
 
         public void Unuse()
@@ -69,6 +78,12 @@ namespace OpenTKTutorial
             uniform.Matrix4(tranpose, ref value);
         }
 
+        public void SetTexture(TextureUnit unit, Texture2D texture)
+        {
+            Utility.Assert(!Textures.ContainsKey(unit), "This texture slot already filled");
+            Textures[unit] = texture;
+        }
+
         private void GetOrCreateUniform(string name, out OpenGLUniform uniform)
         {
             if (Uniforms.TryGetValue(name, out uniform)) return;
@@ -79,6 +94,7 @@ namespace OpenTKTutorial
 
         public void Dispose()
         {
+            Textures.Clear();
             Uniforms.Clear();
             Program.Dispose();
         }

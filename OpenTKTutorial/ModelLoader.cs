@@ -13,8 +13,9 @@ namespace OpenTKTutorial
             using (var importer = new AssimpContext())
             {
                 var scene = importer.ImportFileFromStream(Utility.GetEmbeddedResourceStream(path),
+                    PostProcessSteps.Triangulate |
                     PostProcessSteps.GenerateNormals |
-                    PostProcessSteps.CalculateTangentSpace
+                    PostProcessSteps.FlipUVs
                 );
 
                 Utility.Assert(scene.HasMeshes, "Scene should have at least one material.");
@@ -32,13 +33,14 @@ namespace OpenTKTutorial
 
                     var meshDescriptor = new Mesh.Descriptor();
 
+                    meshDescriptor.Name = mesh.Name;
                     meshDescriptor.Positions = new float[mesh.VertexCount * 3];
                     for (var vertexIndex = 0; vertexIndex < mesh.Vertices.Count; ++vertexIndex)
                     {
                         var vertex = mesh.Vertices[vertexIndex];
-                        meshDescriptor.Positions[3 * vertexIndex + 0] = vertex.X;
-                        meshDescriptor.Positions[3 * vertexIndex + 1] = vertex.Y;
-                        meshDescriptor.Positions[3 * vertexIndex + 2] = vertex.Z;
+                        meshDescriptor.Positions[3 * vertexIndex + 0] = vertex.X * 0.01f;
+                        meshDescriptor.Positions[3 * vertexIndex + 1] = vertex.Y * 0.01f;
+                        meshDescriptor.Positions[3 * vertexIndex + 2] = vertex.Z * 0.01f;
                     }
 
                     meshDescriptor.Normals = new float[mesh.Normals.Count * 3];
@@ -50,26 +52,47 @@ namespace OpenTKTutorial
                         meshDescriptor.Normals[3 * normalIndex + 2] = normal.Z;
                     }
 
-                    // meshDescriptor.Indices = mesh.GetUnsignedIndices();
-                    var indices = new List<uint>();
-                    for (var faceIndex = 0; faceIndex < mesh.Faces.Count; ++faceIndex)
+                    for (var textureCoordsChannel = 0; textureCoordsChannel < mesh.TextureCoordinateChannelCount; ++textureCoordsChannel)
                     {
-                        var face = mesh.Faces[faceIndex];
-                        for (var faceOffset = 0; faceOffset < (face.IndexCount - 2); ++faceOffset)
+                        if (mesh.HasTextureCoords(textureCoordsChannel))
                         {
-                            indices.Add((uint) face.Indices[0]);
-                            indices.Add((uint) face.Indices[faceOffset + 1]);
-                            indices.Add((uint) face.Indices[faceOffset + 2]);
+                            var originalTextureCoordinates = mesh.TextureCoordinateChannels[textureCoordsChannel];
+                            var textureCoordinates = new float[originalTextureCoordinates.Count * 2];
+                            for (var coordinateIndex = 0; coordinateIndex < originalTextureCoordinates.Count; ++coordinateIndex)
+                            {
+                                var textureCoordinate = originalTextureCoordinates[coordinateIndex];
+                                textureCoordinates[2 * coordinateIndex + 0] = textureCoordinate.X;
+                                textureCoordinates[2 * coordinateIndex + 1] = textureCoordinate.Y;
+                            }
+
+                            switch (textureCoordsChannel)
+                            {
+                                case 0:
+                                    meshDescriptor.TextureCoordinates1 = textureCoordinates;
+                                    break;
+                                case 1:
+                                    meshDescriptor.TextureCoordinates2 = textureCoordinates;
+                                    break;
+                                case 2:
+                                    meshDescriptor.TextureCoordinates3 = textureCoordinates;
+                                    break;
+                                case 3:
+                                    meshDescriptor.TextureCoordinates4 = textureCoordinates;
+                                    break;
+                            }
                         }
                     }
-                    meshDescriptor.Indices = indices.ToArray();
+
+                    meshDescriptor.Indices = mesh.GetUnsignedIndices();
 
                     meshes[meshIndex] = new Mesh(meshDescriptor);
                     materialIndices[meshIndex] = mesh.MaterialIndex;
                 }
 
+                var baseDirectory = System.IO.Path.GetDirectoryName(path);
+
                 var materials = scene.Materials
-                    .Select(material => materialFactory.CreateMaterial(material))
+                    .Select(material => materialFactory.CreateMaterial(material, baseDirectory))
                     .ToArray();
 
                 return new Model(new Model.Descriptor()

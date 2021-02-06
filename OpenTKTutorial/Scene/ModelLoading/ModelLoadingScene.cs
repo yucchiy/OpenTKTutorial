@@ -14,20 +14,20 @@ namespace OpenTKTutorial
 
         public void Initialize(InitializeContext context)
         {
-            // Model = ModelLoader.LoadModel("Scene/Resource/ModelLoadingScene/box.obj");
-            Model = ModelLoader.LoadModel("Scene/Resource/ModelLoadingScene/teapot.obj");
+            Model = ModelLoader.LoadModel("Scene/Resource/ModelLoadingScene/Alicia/FBX/Alicia_solid_Unity.FBX");
+            Model.Rotation = new Vector3(-90f, 0f, 0f);
             Camera = new Camera(
-                new Vector3(10f, 10f, 10f),
-                Vector3.Zero,
+                new Vector3(0f, 0f, 3f),
+                new Vector3(0f, 1.6f, 0f),
                 MathHelper.DegreesToRadians(60f),
                 0.1f,
                 1000f,
                 (int)context.Manager.DisplaySize.X,
                 (int)context.Manager.DisplaySize.Y
             );
-            CameraCoordinate = new SphericalCoordinateSystem(Vector3.Zero, 5f, 45f, 45f);
+            CameraCoordinate = new SphericalCoordinateSystem(new Vector3(0f, 1.6f, 0f), 5f, 60f, 90f);
             Light = new Light(
-                new Vector3(5f, 5f, 5f),
+                new Vector3(0f, 5f, 5f),
                 new Vector3(1f, 1f, 1f)
             );
         }
@@ -49,7 +49,7 @@ namespace OpenTKTutorial
         {
             ImGui.Begin("Camera");
 
-            ImGui.SliderFloat("Distance", ref CameraCoordinate.Radius, 0f, 20f);
+            ImGui.SliderFloat("Distance", ref CameraCoordinate.Radius, 0f, 150f);
             ImGui.SliderFloat("Theta", ref CameraCoordinate.Theta, 0f, 180f);
             ImGui.SliderFloat("Phi", ref CameraCoordinate.Phi, 0f, 360f);
 
