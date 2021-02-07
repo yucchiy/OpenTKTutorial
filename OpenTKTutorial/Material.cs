@@ -10,7 +10,7 @@ namespace OpenTKTutorial
         public OpenGLProgram Program { get; }
 
         public System.Collections.Generic.Dictionary<string, OpenGLUniform> Uniforms { get; }
-        public System.Collections.Generic.Dictionary<TextureUnit, Texture2D> Textures { get; }
+        public System.Collections.Generic.Dictionary<TextureUnit, (string Name, Texture2D Texture)> Textures { get; }
 
         public Material(string name, string vertexShaderSourceCode, string fragmentShaderSourceCode)
         {
@@ -24,7 +24,7 @@ namespace OpenTKTutorial
             }
 
             Uniforms = new System.Collections.Generic.Dictionary<string, OpenGLUniform>();
-            Textures = new System.Collections.Generic.Dictionary<TextureUnit, Texture2D>();
+            Textures = new System.Collections.Generic.Dictionary<TextureUnit, (string, Texture2D)>();
         }
 
         public void Use()
@@ -32,8 +32,8 @@ namespace OpenTKTutorial
             Program.Use();
             foreach (var texturePair in Textures)
             {
-                texturePair.Value.Bind();
-                texturePair.Value.Active(texturePair.Key);
+                texturePair.Value.Texture.Active(texturePair.Key);
+                SetInt(texturePair.Value.Name, (int)texturePair.Key - (int)TextureUnit.Texture0);
             }
         }
 
@@ -78,10 +78,10 @@ namespace OpenTKTutorial
             uniform.Matrix4(tranpose, ref value);
         }
 
-        public void SetTexture(TextureUnit unit, Texture2D texture)
+        public void SetTexture(TextureUnit unit, string name, Texture2D texture)
         {
             Utility.Assert(!Textures.ContainsKey(unit), "This texture slot already filled");
-            Textures[unit] = texture;
+            Textures[unit] = (name, texture);
         }
 
         private void GetOrCreateUniform(string name, out OpenGLUniform uniform)

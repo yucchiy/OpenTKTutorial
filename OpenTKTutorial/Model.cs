@@ -95,6 +95,26 @@ namespace OpenTKTutorial
                     OpenTKTutorialConstant.Material.LightColorName,
                     light.Color
                 );
+
+                switch (light.Type)
+                {
+                    case LightType.Directional:
+                        meshRenderer.Material.SetInt(OpenTKTutorialConstant.Material.LightTypeName, (int)LightType.Directional);
+                        meshRenderer.Material.SetVec3(OpenTKTutorialConstant.Material.LightDirectionalDirectionWorld, light.Direction);
+                        break;
+                    case LightType.Point:
+                        meshRenderer.Material.SetInt(OpenTKTutorialConstant.Material.LightTypeName, (int)LightType.Point);
+                        meshRenderer.Material.SetFloat(OpenTKTutorialConstant.Material.LightPointConstant, light.Constant);
+                        meshRenderer.Material.SetFloat(OpenTKTutorialConstant.Material.LightPointLinear, light.Linear);
+                        meshRenderer.Material.SetFloat(OpenTKTutorialConstant.Material.LightPointQuadratic, light.Quadratic);
+                        break;
+                    case LightType.Spot:
+                        meshRenderer.Material.SetInt(OpenTKTutorialConstant.Material.LightTypeName, (int)LightType.Spot);
+                        meshRenderer.Material.SetVec3(OpenTKTutorialConstant.Material.LightDirectionalDirectionWorld, light.Direction);
+                        meshRenderer.Material.SetFloat(OpenTKTutorialConstant.Material.LightSpotCutOff, light.CutOff);
+                        break;
+
+                }
             }
         }
 

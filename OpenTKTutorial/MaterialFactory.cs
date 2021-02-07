@@ -21,6 +21,11 @@ namespace OpenTKTutorial
             throw new OpenTKTutorialException($"MaterialType {type} is not support.");
         }
 
+        public Material CreateCustomMaterial(string vertexShaderSourceCode, string fragmentShaderSourceCode)
+        {
+            return new Material("Custom", vertexShaderSourceCode, fragmentShaderSourceCode);
+        }
+
         public Material CreateMaterial(Assimp.Material assimpMaterial, string baseDirectory = null)
         {
             var material = default(Material);
@@ -133,16 +138,16 @@ namespace OpenTKTutorial
                 switch (assimpMaterial.TextureDiffuse.TextureIndex)
                 {
                     case 0:
-                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture0, texture);
+                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture0, OpenTKTutorialConstant.Material.DiffuseTextureName, texture);
                         break;
                     case 1:
-                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture1, texture);
+                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture1, OpenTKTutorialConstant.Material.DiffuseTextureName, texture);
                         break;
                     case 2:
-                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture2, texture);
+                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture2, OpenTKTutorialConstant.Material.DiffuseTextureName, texture);
                         break;
                     case 3:
-                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture3, texture);
+                        material.SetTexture(OpenTK.Graphics.OpenGL4.TextureUnit.Texture3, OpenTKTutorialConstant.Material.DiffuseTextureName, texture);
                         break;
 
                 }
